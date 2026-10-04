@@ -30,7 +30,7 @@ export default function App() {
           <Route path="*" element={<p>الصفحة غير موجودة</p>} />
         </Routes>
       </main>
-      <footer>© {new Date().getFullYear()} {site.name} · {site.email}</footer>
+      <footer><span>© {new Date().getFullYear()} {site.name}</span><span dir="ltr">{site.phone}</span><span>{site.email}</span></footer>
     </HashRouter>
   );
 }

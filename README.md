@@ -17,4 +17,3 @@
 
 ## قاعدة البيانات
 شغّل `db/migration.sql` لإضافة العمود `screenshots` (يقبل NULL).
-# manhalbasir.github.io

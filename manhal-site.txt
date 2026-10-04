@@ -1,0 +1,407 @@
+
+================================================================================
+FILE: index.html
+================================================================================
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>منهل</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;700&display=swap" rel="stylesheet" />
+  </head>
+  <body><div id="root"></div><script type="module" src="/src/main.jsx"></script></body>
+</html>
+
+
+================================================================================
+FILE: package.json
+================================================================================
+{
+  "name": "manhal-site",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": { "dev": "vite", "build": "vite build", "preview": "vite preview" },
+  "dependencies": { "react": "^18.3.1", "react-dom": "^18.3.1", "react-router-dom": "^6.26.2" },
+  "devDependencies": { "@vitejs/plugin-react": "^4.3.1", "vite": "^5.4.8" }
+}
+
+
+================================================================================
+FILE: vite.config.js
+================================================================================
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+
+// BASE_PATH يُضبط تلقائيًا في GitHub Actions: /اسم-المستودع/
+export default defineConfig({ plugins: [react()], base: process.env.BASE_PATH || "/" });
+
+
+================================================================================
+FILE: src\App.jsx
+================================================================================
+import { HashRouter, Routes, Route, NavLink } from "react-router-dom";
+import { site } from "./data/site";
+import Home from "./pages/Home";
+import AppPage from "./pages/AppPage";
+import Privacy from "./pages/Privacy";
+import Portfolio from "./pages/Portfolio";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+
+export default function App() {
+  return (
+    <HashRouter>
+      <header className="nav">
+        <NavLink to="/" className="brand">{site.name}</NavLink>
+        <nav>
+          <NavLink to="/">التطبيقات</NavLink>
+          <NavLink to="/portfolio">أعمالنا</NavLink>
+          <NavLink to="/about">من نحن</NavLink>
+          <NavLink to="/contact">تواصل معنا</NavLink>
+        </nav>
+      </header>
+      <main>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/app/:id" element={<AppPage />} />
+          <Route path="/privacy/:id" element={<Privacy />} />
+          <Route path="/portfolio" element={<Portfolio />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="*" element={<p>الصفحة غير موجودة</p>} />
+        </Routes>
+      </main>
+      <footer>© {new Date().getFullYear()} {site.name} · {site.email}</footer>
+    </HashRouter>
+  );
+}
+
+
+================================================================================
+FILE: src\main.jsx
+================================================================================
+import React from "react";
+import { createRoot } from "react-dom/client";
+import App from "./App";
+import "./styles.css";
+
+createRoot(document.getElementById("root")).render(<App />);
+
+
+================================================================================
+FILE: src\styles.css
+================================================================================
+:root{--bg:#eef1f7;--ink:#101828;--mut:#5b6577;--card:#fff;--line:#d9dfeb;--acc:#2f4bff;--accink:#fff}
+@media (prefers-color-scheme:dark){:root{--bg:#0e1320;--ink:#e8ecf6;--mut:#9aa5bd;--card:#161d2e;--line:#27304a;--acc:#6f86ff;--accink:#0e1320}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.8 "IBM Plex Sans Arabic",system-ui,sans-serif}
+a{color:var(--acc)}
+main{max-width:960px;margin:0 auto;padding:24px 16px 48px}
+h1{font-size:2rem;line-height:1.3;margin:.5rem 0 1rem}
+h2{font-size:1.25rem;margin:1.8rem 0 .5rem}
+h3{margin:0}
+.muted{color:var(--mut);margin:.2rem 0}
+.nav{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--card);border-bottom:1px solid var(--line)}
+.nav nav{display:flex;flex-wrap:wrap;gap:4px 18px}
+.nav a{text-decoration:none;color:var(--ink)}
+.nav a.active{color:var(--acc);font-weight:700}
+.brand{font-weight:700;font-size:1.3rem}
+.search{width:100%;max-width:420px;padding:10px 14px;margin-bottom:20px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font:inherit}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.card{display:flex;gap:14px;align-items:center;padding:14px;background:var(--card);border:1px solid var(--line);border-radius:14px;text-decoration:none;color:var(--ink)}
+.card.col{flex-direction:column;align-items:flex-start}
+.card:focus-visible,.btn:focus-visible,a:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.icon{border-radius:22%;object-fit:cover;flex:none}
+.icon.ph{display:grid;place-items:center;background:var(--acc);color:var(--accink);font-weight:700}
+.hero{display:flex;gap:18px;align-items:center;margin-bottom:16px}
+.buttons{display:flex;flex-wrap:wrap;gap:10px}
+.btn{padding:10px 20px;border-radius:10px;background:var(--acc);color:var(--accink);text-decoration:none;font-weight:700}
+.btn.alt{background:transparent;color:var(--acc);border:2px solid var(--acc)}
+.gallery{display:flex;gap:12px;overflow-x:auto;padding-bottom:8px}
+.gallery img{height:380px;border-radius:12px;border:1px solid var(--line)}
+.cover{width:100%;border-radius:10px}
+.prose{max-width:680px}
+footer{text-align:center;color:var(--mut);padding:24px;font-size:.9rem}
+
+
+================================================================================
+FILE: src\components\Gallery.jsx
+================================================================================
+// يقبل null أو undefined أو [] ولا يعرض شيئًا في هذه الحالات
+export default function Gallery({ shots }) {
+  const list = Array.isArray(shots) ? shots.filter(Boolean) : [];
+  if (list.length === 0) return null;
+  return (
+    <section>
+      <h2>لقطات من التطبيق</h2>
+      <div className="gallery">
+        {list.map((s, i) => (
+          <img key={i} src={s} alt={`لقطة ${i + 1}`} loading="lazy" />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+
+================================================================================
+FILE: src\components\Icon.jsx
+================================================================================
+export default function Icon({ app, size = 64 }) {
+  const s = { width: size, height: size, fontSize: size * 0.45 };
+  return app.icon ? (
+    <img className="icon" style={s} src={app.icon} alt="" loading="lazy" />
+  ) : (
+    <div className="icon ph" style={s} aria-hidden="true">{app.name[0]}</div>
+  );
+}
+
+
+================================================================================
+FILE: src\data\apps.js
+================================================================================
+import { site } from "./site";
+
+/*
+ لإضافة تطبيق: أضف سطرًا هنا فقط.
+ الحقول الاختيارية (كلها تقبل null أو الحذف):
+   icon, shots (مصفوفة صور أو null), description, tagline, category, play,
+   platforms: { ios, web, windows }  ← روابط
+   privacy: { collectsData, permissions, thirdParties, updated }
+ المسارات النسبية للصور تُقرأ من storageBase، والروابط الكاملة (https) تُستخدم كما هي.
+*/
+const raw = [
+  { name: "UniversalPrint", pkg: "com.devbelmel.universalprinter", v: "1.0", mb: 11.7, shots: null },
+  { name: "AliAffiliateApp", pkg: "com.aliaffiliate.app", v: "1.0", mb: 6.6, shots: null },
+  { name: "Offers", pkg: "com.devbelmel.offers_app", v: "1.0", mb: 14.4, shots: null },
+  { name: "AppStore", pkg: "com.devbelmel.appstore_app", v: "0.1.0", mb: 4.4, shots: null },
+  { name: "Manhal", pkg: "com.devbelmel.manhal_app", v: "1.0", mb: 10.3, shots: null },
+  { name: "Hikmah", pkg: "com.hikmah.app", v: "1.0", mb: 18.0, shots: null },
+  { name: "ManhalPatched", pkg: "com.devbelmel.manhalpatched_app", v: "1.0", mb: 10.3, shots: null },
+  { name: "MediaHub Admin", pkg: "com.mediahub.admin", v: "1.0", mb: 2.8, shots: null },
+  { name: "MediaHub", pkg: "com.mediahub.app", v: "1.0", mb: 5.5, shots: null },
+  { name: "MobileCodeStudio", pkg: "com.mobilecodestudio.app", v: "0.1.0-stage1", mb: 10.5, shots: null },
+  { name: "PartsCompat", pkg: "com.devbelmel.partscompat_app", v: "1.0", mb: 9.8, shots: null },
+  { name: "Quranic Admin", pkg: "com.quranicschool.admin", v: "1.0.0", mb: 14.9, shots: null },
+  { name: "Quranic Parents", pkg: "com.quranicschool.parents", v: "1.0.0", mb: 15.0, shots: null },
+  { name: "Shwiya", pkg: "com.devbelmel.shwiya_app", v: "0.1.0", mb: 13.4, shots: null },
+  { name: "TikClone", pkg: "com.devbelmel.tikclone_app", v: "0.1.0", mb: 13.3, shots: null },
+];
+
+const full = (p) => (!p ? null : /^https?:/.test(p) ? p : site.storageBase + p);
+
+export const apps = raw.map((r) => ({
+  id: r.name.toLowerCase().replace(/\s+/g, "-"),
+  name: r.name,
+  pkg: r.pkg,
+  tagline: r.tagline ?? "تطبيق أندرويد من منهل",
+  description: r.description ?? null,
+  category: r.category ?? "أخرى",
+  version: r.v,
+  sizeMB: r.mb,
+  icon: full(r.icon),
+  // null أو undefined أو مصفوفة فارغة ← تصبح [] والواجهة تخفي المعرض
+  screenshots: Array.isArray(r.shots) ? r.shots.filter(Boolean).map(full) : [],
+  platforms: {
+    android: { apk: full(`apps/${r.pkg}/app-release.apk`), play: r.play ?? null },
+    ...(r.platforms ?? {}),
+  },
+  privacy: { updated: "2026-10-04", collectsData: false, permissions: [], thirdParties: [], ...(r.privacy ?? {}) },
+}));
+
+export const findApp = (id) => apps.find((a) => a.id === id);
+
+
+================================================================================
+FILE: src\data\projects.js
+================================================================================
+// الخدمات المنجزة للزبائن. مثال لإدخال:
+// { title: "تطبيق مدرسة", client: "اسم الزبون", description: "ما أنجزناه...", image: null }
+export const projects = [];
+
+
+================================================================================
+FILE: src\data\site.js
+================================================================================
+export const site = {
+  name: "منهل",
+  phone: "0797492898",
+  email: "manhalbasir@gmail.com",
+  // رابط Supabase Storage العام (bucket: manhal-files). مضبوط على مشروع منهل.
+  storageBase: "https://fnwpiyyedppkuuofrjok.supabase.co/storage/v1/object/public/manhal-files/",
+  about:
+    "منهل استوديو لتطوير تطبيقات الأندرويد والويب. نبني تطبيقاتنا الخاصة وننفّذ مشاريع للزبائن من الفكرة إلى النشر.",
+};
+
+
+================================================================================
+FILE: src\pages\About.jsx
+================================================================================
+import { site } from "../data/site";
+
+export default function About() {
+  return (
+    <article className="prose">
+      <h1>من نحن</h1>
+      <p>{site.about}</p>
+    </article>
+  );
+}
+
+
+================================================================================
+FILE: src\pages\AppPage.jsx
+================================================================================
+import { useParams, Link } from "react-router-dom";
+import { findApp } from "../data/apps";
+import Icon from "../components/Icon";
+import Gallery from "../components/Gallery";
+
+const extra = { ios: "App Store", web: "نسخة الويب", windows: "Windows" };
+
+export default function AppPage() {
+  const app = findApp(useParams().id);
+  if (!app) return <p>التطبيق غير موجود. <Link to="/">العودة للتطبيقات</Link></p>;
+  const { android, ...others } = app.platforms;
+
+  return (
+    <>
+      <div className="hero">
+        <Icon app={app} size={96} />
+        <div>
+          <h1>{app.name}</h1>
+          <p className="muted">الإصدار {app.version} · {app.sizeMB} ميغابايت</p>
+        </div>
+      </div>
+
+      <div className="buttons">
+        {android.play && <a className="btn" href={android.play} target="_blank" rel="noreferrer">Google Play</a>}
+        {android.apk && <a className={android.play ? "btn alt" : "btn"} href={android.apk}>تحميل APK</a>}
+        {Object.entries(others).map(([k, url]) => url && (
+          <a key={k} className="btn alt" href={url} target="_blank" rel="noreferrer">{extra[k] ?? k}</a>
+        ))}
+      </div>
+
+      <section>
+        <h2>عن التطبيق</h2>
+        <p>{app.description ?? app.tagline}</p>
+      </section>
+
+      <Gallery shots={app.screenshots} />
+
+      <p><Link to={`/privacy/${app.id}`}>سياسة الخصوصية</Link></p>
+    </>
+  );
+}
+
+
+================================================================================
+FILE: src\pages\Contact.jsx
+================================================================================
+import { site } from "../data/site";
+
+export default function Contact() {
+  const wa = "https://wa.me/213" + site.phone.replace(/^0/, "");
+  return (
+    <article className="prose">
+      <h1>تواصل معنا</h1>
+      <p>الهاتف: <a href={`tel:${site.phone}`} dir="ltr">{site.phone}</a></p>
+      <p>واتساب: <a href={wa} target="_blank" rel="noreferrer">ابدأ محادثة</a></p>
+      <p>البريد: <a href={`mailto:${site.email}`}>{site.email}</a></p>
+    </article>
+  );
+}
+
+
+================================================================================
+FILE: src\pages\Home.jsx
+================================================================================
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { apps } from "../data/apps";
+import Icon from "../components/Icon";
+
+export default function Home() {
+  const [q, setQ] = useState("");
+  const list = apps.filter((a) => a.name.toLowerCase().includes(q.trim().toLowerCase()));
+  return (
+    <>
+      <h1>تطبيقاتنا</h1>
+      <input className="search" placeholder="ابحث عن تطبيق" value={q} onChange={(e) => setQ(e.target.value)} />
+      {list.length === 0 && <p className="muted">لا توجد تطبيقات بهذا الاسم.</p>}
+      <div className="grid">
+        {list.map((a) => (
+          <Link key={a.id} to={`/app/${a.id}`} className="card">
+            <Icon app={a} />
+            <div>
+              <h3>{a.name}</h3>
+              <p className="muted">{a.tagline}</p>
+              <small>{Object.keys(a.platforms).length > 1 ? "متعدد المنصات" : "أندرويد"}</small>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </>
+  );
+}
+
+
+================================================================================
+FILE: src\pages\Portfolio.jsx
+================================================================================
+import { projects } from "../data/projects";
+
+export default function Portfolio() {
+  return (
+    <>
+      <h1>خدمات أنجزناها</h1>
+      {projects.length === 0 && <p className="muted">سنضيف أعمالنا هنا قريبًا.</p>}
+      <div className="grid">
+        {projects.map((p) => (
+          <div key={p.title} className="card col">
+            {p.image && <img className="cover" src={p.image} alt="" loading="lazy" />}
+            <h3>{p.title}</h3>
+            {p.client && <small>{p.client}</small>}
+            <p className="muted">{p.description}</p>
+          </div>
+        ))}
+      </div>
+    </>
+  );
+}
+
+
+================================================================================
+FILE: src\pages\Privacy.jsx
+================================================================================
+import { useParams } from "react-router-dom";
+import { findApp } from "../data/apps";
+import { site } from "../data/site";
+
+export default function Privacy() {
+  const app = findApp(useParams().id);
+  if (!app) return <p>غير موجود</p>;
+  const p = app.privacy;
+  const list = (arr, empty) => (arr.length ? <ul>{arr.map((x) => <li key={x}>{x}</li>)}</ul> : <p>{empty}</p>);
+
+  return (
+    <article className="prose">
+      <h1>سياسة الخصوصية: {app.name}</h1>
+      <p className="muted">آخر تحديث: {p.updated}</p>
+      <h2>البيانات التي نجمعها</h2>
+      <p>{p.collectsData ? "يجمع التطبيق بعض البيانات اللازمة لعمله كما هو موضح في هذه الصفحة." : "لا يجمع التطبيق أي بيانات شخصية عن مستخدميه."}</p>
+      <h2>الصلاحيات</h2>
+      {list(p.permissions, "لا يطلب التطبيق صلاحيات خاصة.")}
+      <h2>خدمات الأطراف الثالثة</h2>
+      {list(p.thirdParties, "لا يستخدم التطبيق خدمات أطراف ثالثة.")}
+      <h2>مشاركة البيانات</h2>
+      <p>لا نبيع بياناتك ولا نشاركها مع جهات إعلانية.</p>
+      <h2>التواصل</h2>
+      <p>لأي استفسار عن الخصوصية: <a href={`mailto:${site.email}`}>{site.email}</a></p>
+    </article>
+  );
+}
+
